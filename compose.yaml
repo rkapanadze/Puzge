@@ -1,0 +1,36 @@
+﻿version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: puzge_user
+      POSTGRES_PASSWORD: puzge_pass
+      POSTGRES_DB: puzge_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Puzge.Api/Dockerfile
+    ports:
+        - "8080:8080"
+        - "5005:5005"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=puzge_db;Username=puzge_user;Password=puzge_pass
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./Puzge.Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+
+volumes:
+  pgdata:
