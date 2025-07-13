@@ -2,38 +2,97 @@
   .hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 5rem 0;
+    padding: 0;
+    margin: 0;
     text-align: center;
+    position: relative;
+    top: 0;
+    min-height: 5px;
 
     .hero-content {
       max-width: 800px;
       margin: 0 auto;
+      padding: 0;
     }
 
     .hero-title {
-      font-size: 3rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      margin-bottom: 1.5rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0;
+      padding: 0;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
 
     .hero-subtitle {
-      font-size: 1.3rem;
-      margin-bottom: 2.5rem;
+      font-size: 0.4rem;
+      margin: 0;
+      padding: 0;
       opacity: 0.9;
-      line-height: 1.6;
+      line-height: 1.2;
+    }
+  }
+
+  .category-options {
+    padding: 3rem 0;
+    background: #f8f9fa;
+
+    .category-options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    .hero-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      align-items: center;
+    .category-option {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      padding: 2rem;
 
-      .btn {
-        min-width: 200px;
-        padding: 1rem 2rem;
-        font-size: 1.1rem;
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .category-option-content {
+        text-align: center;
+
+        .category-option-icon {
+          font-size: 4rem;
+          margin-bottom: 1.5rem;
+        }
+
+        h3 {
+          font-size: 1.5rem;
+          color: #2c3e50;
+          margin-bottom: 1rem;
+          font-weight: 600;
+        }
+
+        p {
+          color: #7f8c8d;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+        }
+
+        .category-option-button {
+          display: inline-block;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 0.8rem 2rem;
+          border-radius: 25px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+
+        &:hover .category-option-button {
+          transform: scale(1.05);
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
       }
     }
   }
@@ -85,63 +144,6 @@
     }
   }
 
-  .categories {
-    .categories-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-
-    .category-card {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-
-      &:hover {
-        transform: translateY(-5px);
-      }
-
-      .category-image {
-        height: 200px;
-        background: #f8f9fa;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 4rem;
-        color: #95a5a6;
-        overflow: hidden;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-      }
-
-      .category-content {
-        padding: 1.5rem;
-
-        h3 {
-          font-size: 1.3rem;
-          color: #2c3e50;
-          margin-bottom: 0.5rem;
-        }
-
-        p {
-          color: #7f8c8d;
-          line-height: 1.6;
-          margin-bottom: 1.5rem;
-        }
-
-        .btn {
-          width: 100%;
-        }
-      }
-    }
-  }
-
   .cta {
     background: #2c3e50;
     color: white;
@@ -174,7 +176,15 @@
 @media (min-width: 768px) {
   .home-page {
     .hero {
-      padding: 7rem 0;
+      padding: 1.4rem 0;
+
+      .hero-title {
+        font-size: 1.4rem;
+      }
+
+      .hero-subtitle {
+        font-size: 0.7rem;
+      }
 
       .hero-actions {
         flex-direction: row;
@@ -182,15 +192,16 @@
       }
     }
 
-    .features {
-      .features-grid {
+    .category-options {
+      .category-options-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
       }
     }
 
-    .categories {
-      .categories-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .features {
+      .features-grid {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
   }
@@ -200,18 +211,20 @@
 @media (min-width: 1024px) {
   .home-page {
     .hero {
+      padding: 2.1rem 0;
+
       .hero-title {
-        font-size: 4rem;
+        font-size: 2.1rem;
       }
 
       .hero-subtitle {
-        font-size: 1.5rem;
+        font-size: 0.91rem;
       }
     }
 
-    .categories {
-      .categories-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .category-options {
+      .category-options-grid {
+        gap: 2rem;
       }
     }
   }

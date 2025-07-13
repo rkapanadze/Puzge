@@ -12,35 +12,22 @@
           : 'აღმოაჩინეთ საოცარი თავსატეხები, სამაგიდო თამაშები და ბარათული თამაშები მთელი ოჯახისთვის'
           }}
         </p>
-        <div class="hero-actions">
-          <a routerLink="/products" class="btn btn-primary">
-            {{ currentLanguage === 'en' ? 'Shop Now' : 'ყიდვა ახლავე' }}
-          </a>
-          <a routerLink="/categories" class="btn btn-outline">
-            {{ currentLanguage === 'en' ? 'Browse Categories' : 'კატეგორიების დათვალიერება' }}
-          </a>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- Categories Section -->
-  <section class="categories page-section bg-light">
+  <!-- Category Options Section -->
+  <section class="category-options">
     <div class="container">
-      <h2 class="section-title">
-        {{ currentLanguage === 'en' ? 'Featured Categories' : 'რჩეული კატეგორიები' }}
-      </h2>
-      <div class="categories-grid">
-        <div class="category-card" *ngFor="let category of getFeaturedCategories()">
-          <div class="category-image">
-            <img [src]="category.image" [alt]="languageService.getLocalizedText(category.name)" />
-          </div>
-          <div class="category-content">
+      <div class="category-options-grid">
+        <div class="category-option" *ngFor="let category of getFeaturedCategories()" (click)="navigateToProducts(category.type)">
+          <div class="category-option-content">
+            <div class="category-option-icon">{{ category.icon }}</div>
             <h3>{{ languageService.getLocalizedText(category.name) }}</h3>
             <p>{{ languageService.getLocalizedText(category.description) }}</p>
-            <a [routerLink]="['/category', category.slug]" class="btn btn-primary">
+            <div class="category-option-button">
               {{ currentLanguage === 'en' ? 'Explore' : 'შეისწავლეთ' }}
-            </a>
+            </div>
           </div>
         </div>
       </div>

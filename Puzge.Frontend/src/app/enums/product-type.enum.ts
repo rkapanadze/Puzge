@@ -1,7 +1,7 @@
 export enum ProductType {
-  PUZZLE = 'puzzle',
-  BOARDGAME = 'boardgame',
-  CARDGAME = 'cardgame'
+  PUZZLE = 'Puzzle',
+  BOARDGAME = 'Boardgame',
+  CARDGAME = 'Cardgame'
 }
 export function getProductTypeDisplayText(type: ProductType): { en: string, ka: string } {
   switch (type) {
