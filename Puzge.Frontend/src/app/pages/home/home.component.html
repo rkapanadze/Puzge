@@ -1,0 +1,100 @@
+<div class="home-page">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          {{ currentLanguage === 'en' ? 'Welcome to Kvandzi' : 'მოგესალმებით კვანძში' }}
+        </h1>
+        <p class="hero-subtitle">
+          {{ currentLanguage === 'en'
+          ? 'Discover amazing puzzles, board games, and card games for the whole family'
+          : 'აღმოაჩინეთ საოცარი თავსატეხები, სამაგიდო თამაშები და ბარათული თამაშები მთელი ოჯახისთვის'
+          }}
+        </p>
+        <div class="hero-actions">
+          <a routerLink="/products" class="btn btn-primary">
+            {{ currentLanguage === 'en' ? 'Shop Now' : 'ყიდვა ახლავე' }}
+          </a>
+          <a routerLink="/categories" class="btn btn-outline">
+            {{ currentLanguage === 'en' ? 'Browse Categories' : 'კატეგორიების დათვალიერება' }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories page-section bg-light">
+    <div class="container">
+      <h2 class="section-title">
+        {{ currentLanguage === 'en' ? 'Featured Categories' : 'რჩეული კატეგორიები' }}
+      </h2>
+      <div class="categories-grid">
+        <div class="category-card" *ngFor="let category of getFeaturedCategories()">
+          <div class="category-image">
+            <img [src]="category.image" [alt]="languageService.getLocalizedText(category.name)" />
+          </div>
+          <div class="category-content">
+            <h3>{{ languageService.getLocalizedText(category.name) }}</h3>
+            <p>{{ languageService.getLocalizedText(category.description) }}</p>
+            <a [routerLink]="['/category', category.slug]" class="btn btn-primary">
+              {{ currentLanguage === 'en' ? 'Explore' : 'შეისწავლეთ' }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features page-section">
+    <div class="container">
+      <h2 class="section-title">
+        {{ currentLanguage === 'en' ? 'Why Choose Kvandzi?' : 'რატომ აირჩიოთ კვანძი?' }}
+      </h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🧩</div>
+          <h3>{{ currentLanguage === 'en' ? 'Quality Products' : 'ხარისხიანი პროდუქტები' }}</h3>
+          <p>{{ currentLanguage === 'en'
+            ? 'We carefully select only the best puzzles and games from trusted manufacturers'
+            : 'ჩვენ ფრთხილად ვირჩევთ მხოლოდ საუკეთესო თავსატეხებს და თამაშებს სანდო მწარმოებლებისგან'
+            }}</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎲</div>
+          <h3>{{ currentLanguage === 'en' ? 'Wide Selection' : 'ფართო არჩევანი' }}</h3>
+          <p>{{ currentLanguage === 'en'
+            ? 'From classic board games to modern card games, we have something for everyone'
+            : 'კლასიკური სამაგიდო თამაშებიდან თანამედროვე ბარათულ თამაშებამდე, ჩვენ გვაქვს ყველასთვის რამე'
+            }}</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👨‍👩‍👧‍👦</div>
+          <h3>{{ currentLanguage === 'en' ? 'Family Fun' : 'ოჯახური გასართობი' }}</h3>
+          <p>{{ currentLanguage === 'en'
+            ? 'Our games are perfect for bringing families together and creating lasting memories'
+            : 'ჩვენი თამაშები იდეალურია ოჯახების დასაახლოებლად და წარმუვლელი მეხსიერებების შესაქმნელად'
+            }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta page-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>{{ currentLanguage === 'en' ? 'Ready to Start Playing?' : 'მზად ხართ თამაშის დაწყებისთვის?' }}</h2>
+        <p>{{ currentLanguage === 'en'
+          ? 'Browse our complete collection and find the perfect game for your next family gathering'
+          : 'დათვალიერეთ ჩვენი სრული კოლექცია და იპოვეთ შესანიშნავი თამაში შემდგომი ოჯახური შეკრების შესაბამისად'
+          }}</p>
+        <a routerLink="/products" class="btn btn-primary btn-large">
+          {{ currentLanguage === 'en' ? 'View All Products' : 'ყველა პროდუქტის ნახვა' }}
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,79 @@
+
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <!-- Logo -->
+      <div class="logo">
+        <a routerLink="/" class="logo-link">
+          <h1 class="logo-text">Kvandzi</h1>
+          <span class="logo-subtitle">
+            {{ currentLanguage === 'en' ? 'Puzzles & Games' : 'თავსატეხები და თამაშები' }}
+          </span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="desktop-nav">
+        <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          {{ currentLanguage === 'en' ? 'Home' : 'მთავარი' }}
+        </a>
+        <a routerLink="/products" class="nav-link" routerLinkActive="active">
+          {{ currentLanguage === 'en' ? 'Products' : 'პროდუქტები' }}
+        </a>
+        <a routerLink="/categories" class="nav-link" routerLinkActive="active">
+          {{ currentLanguage === 'en' ? 'Categories' : 'კატეგორიები' }}
+        </a>
+        <a routerLink="/about" class="nav-link" routerLinkActive="active">
+          {{ currentLanguage === 'en' ? 'About' : 'ჩვენ შესახებ' }}
+        </a>
+        <a routerLink="/contact" class="nav-link" routerLinkActive="active">
+          {{ currentLanguage === 'en' ? 'Contact' : 'კონტაქტი' }}
+        </a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="header-actions">
+        <!-- Language Switcher -->
+        <div class="language-switcher">
+          <button class="language-btn" (click)="toggleLanguage()">
+            <span class="flag">{{ getCurrentLanguageOption()?.flag }}</span>
+            <span class="lang-code">{{ currentLanguage.toUpperCase() }}</span>
+          </button>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+          <span class="hamburger" [class.open]="isMobileMenuOpen">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" [class.open]="isMobileMenuOpen">
+      <div class="mobile-nav-content">
+        <a routerLink="/" class="mobile-nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
+          {{ currentLanguage === 'en' ? 'Home' : 'მთავარი' }}
+        </a>
+        <a routerLink="/products" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
+          {{ currentLanguage === 'en' ? 'Products' : 'პროდუქტები' }}
+        </a>
+        <a routerLink="/categories" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
+          {{ currentLanguage === 'en' ? 'Categories' : 'კატეგორიები' }}
+        </a>
+        <a routerLink="/about" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
+          {{ currentLanguage === 'en' ? 'About' : 'ჩვენ შესახებ' }}
+        </a>
+        <a routerLink="/contact" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
+          {{ currentLanguage === 'en' ? 'Contact' : 'კონტაქტი' }}
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Backdrop for mobile menu -->
+<div class="mobile-backdrop" [class.open]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
