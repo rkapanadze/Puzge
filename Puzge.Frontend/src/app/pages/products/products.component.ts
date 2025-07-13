@@ -41,7 +41,7 @@ export class ProductsComponent implements OnInit {
     public languageService: LanguageService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadCategories();

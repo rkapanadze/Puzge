@@ -1,6 +1,138 @@
-@Puzge.Api_HostAddress = http://localhost:5223
+@baseUrl = http://localhost:5223
 
-GET {{Puzge.Api_HostAddress}}/weatherforecast/
+# Create Categories
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": {
+    "en": "Board Games",
+    "ka": "საგაზაფხულო თამაშები"
+  },
+  "description": {
+    "en": "Classic and modern board games for all ages",
+    "ka": "კლასიკური და თანამედროვე საგაზაფხულო თამაშები ყველა ასაკისთვის"
+  },
+  "isActive": true
+}
+
+###
+
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+  "name": {
+    "en": "Puzzles",
+    "ka": "პაზლები"
+  },
+  "description": {
+    "en": "Jigsaw puzzles and brain teasers",
+    "ka": "ჯიგსოუს პაზლები და ტვინის გამოცდილებები"
+  },
+  "isActive": true
+}
+
+###
+
+# Create Subcategories
+POST {{baseUrl}}/subcategories
+Content-Type: application/json
+
+{
+  "name": {
+    "en": "Strategy Games",
+    "ka": "სტრატეგიული თამაშები"
+  },
+  "description": {
+    "en": "Strategic thinking and planning games",
+    "ka": "სტრატეგიული აზროვნების და დაგეგმვის თამაშები"
+  },
+  "categoryId": "4d6f7f0b-0148-46ad-8202-57b0c19c1a9a",
+  "isActive": true
+}
+
+###
+
+POST {{baseUrl}}/subcategories
+Content-Type: application/json
+
+{
+  "name": {
+    "en": "Family Games",
+    "ka": "ოჯახური თამაშები"
+  },
+  "description": {
+    "en": "Fun games for the whole family",
+    "ka": "სახალისო თამაშები მთელი ოჯახისთვის"
+  },
+  "categoryId": "4d6f7f0b-0148-46ad-8202-57b0c19c1a9a",
+  "isActive": true
+}
+
+###
+
+POST {{baseUrl}}/subcategories
+Content-Type: application/json
+
+{
+  "name": {
+    "en": "Jigsaw Puzzles",
+    "ka": "ჯიგსოუს პაზლები"
+  },
+  "description": {
+    "en": "Traditional jigsaw puzzles",
+    "ka": "ტრადიციული ჯიგსოუს პაზლები"
+  },
+  "categoryId": "4d6f7f0b-0148-46ad-8202-57b0c19c1a9a",
+  "isActive": true
+}
+
+###
+
+# Create a Product
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": {
+    "en": "Chess Master Set",
+    "ka": "ჭადრაკის მასტერის ნაკრები"
+  },
+  "description": {
+    "en": "Professional chess set with wooden pieces and board",
+    "ka": "პროფესიონალური ჭადრაკის ნაკრები ხის ფიგურებით და დაფით"
+  },
+  "type": "Boardgame",
+  "categoryIds": ["4d6f7f0b-0148-46ad-8202-57b0c19c1a9a"],
+  "subcategoryIds": ["6cebea86-6dd5-4837-904f-039fe578d66a"],
+  "images": [
+    "https://example.com/chess-set-1.jpg",
+    "https://example.com/chess-set-2.jpg"
+  ],
+  "price": 45.99,
+  "isAvailable": true,
+  "specifications": {
+    "dimensions": "40cm x 40cm",
+    "weight": "2.5kg",
+    "material": "Wood",
+    "ageRange": "8+",
+    "playerCount": "2",
+    "playTime": "30-120 minutes",
+    "difficulty": "Intermediate"
+  }
+}
+
+###
+
+# Get all categories
+GET {{baseUrl}}/categories
+Accept: application/json
+
+###
+
+# Get all products
+GET {{baseUrl}}/products
 Accept: application/json
 
 ###

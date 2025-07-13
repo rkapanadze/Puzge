@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
           en: 'Discover exciting card games for all ages',
           ka: 'აღმოაჩინეთ საინტერესო ბარათული თამაშები ყველა ასაკისთვის'
         },
-        image: '/assets/images/card-games-category.jpg',
+        image: '/assets/images/card-games-category.svg',
         slug: 'card-games'
       }
     ];
