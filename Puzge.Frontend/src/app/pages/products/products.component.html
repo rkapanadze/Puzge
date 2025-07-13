@@ -58,7 +58,7 @@
                 <input
                   type="checkbox"
                   [checked]="isCategorySelected(category.id)"
-                  (change)="onCategoryChange(category.id, $event.target.checked)">
+                  (change)="onCategoryChange(category.id, $any($event.target).checked)">
                 <span>{{ languageService.getLocalizedText(category.name) }}</span>
               </label>
 
@@ -68,7 +68,7 @@
                   <input
                     type="checkbox"
                     [checked]="isSubcategorySelected(subcategory.id)"
-                    (change)="onSubcategoryChange(subcategory.id, $event.target.checked)">
+                    (change)="onSubcategoryChange(subcategory.id, $any($event.target).checked)">
                   <span>{{ languageService.getLocalizedText(subcategory.name) }}</span>
                 </label>
               </div>

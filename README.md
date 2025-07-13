@@ -96,3 +96,18 @@
   ```bash
   dotnet test
   ```
+
+- **Add Migration:**
+  ```bash
+  dotnet ef migrations add InitialCreate --output-dir Data/Migrations
+  ```
+
+- **Update the Database:**
+  ```bash
+  dotnet ef database update
+  ```
+
+- **Remove Migration**
+  ```bash
+  dotnet ef migrations remove
+  ```
