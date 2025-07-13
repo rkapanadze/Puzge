@@ -48,4 +48,16 @@ export class LanguageService {
     const currentLang = this.getCurrentLanguage();
     return text[currentLang] || text.en;
   }
+
+  // Helper method to get font family based on language
+  getFontFamily(): string {
+    const currentLang = this.getCurrentLanguage();
+    if (currentLang === 'ka') {
+      // Georgian - use elegant serif fonts associated with wine regions
+      return "'Playfair Display', 'Crimson Text', 'Libre Baskerville', serif";
+    } else {
+      // English - use friendly, curvy fonts
+      return "'Nunito', 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    }
+  }
 }

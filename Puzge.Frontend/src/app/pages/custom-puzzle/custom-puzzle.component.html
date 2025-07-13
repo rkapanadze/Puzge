@@ -1,0 +1,72 @@
+<div class="custom-puzzle-page">
+  <div class="container">
+    <!-- Header Section -->
+    <div class="page-header">
+      <div class="header-icon">🧩</div>
+      <h1 class="page-title">
+        {{ currentLanguage === 'en' ? 'Custom Puzzle Creator' : 'მორგებული თავსატეხის შემქმნელი' }}
+      </h1>
+      <p class="page-subtitle">
+        {{ currentLanguage === 'en' 
+          ? 'Turn your photos into beautiful custom puzzles' 
+          : 'გადააქციეთ თქვენი ფოტოები ლამაზ მორგებულ თავსატეხებად' 
+        }}
+      </p>
+    </div>
+
+    <!-- Coming Soon Section -->
+    <div class="coming-soon-section">
+      <div class="coming-soon-content">
+        <div class="coming-soon-icon">🚧</div>
+        <h2 class="coming-soon-title">
+          {{ currentLanguage === 'en' ? 'Coming Soon!' : 'მალე!' }}
+        </h2>
+        <p class="coming-soon-description">
+          {{ currentLanguage === 'en'
+            ? 'We\'re working hard to bring you the best custom puzzle creation experience. This feature will be available soon!'
+            : 'ჩვენ ვმუშაობთ იმისთვის, რომ მოგცეთ საუკეთესო მორგებული თავსატეხის შექმნის გამოცდილება. ეს ფუნქცია მალე ხელმისაწვდომი იქნება!'
+          }}
+        </p>
+        
+        <div class="features-preview">
+          <div class="feature-preview-item">
+            <div class="feature-icon">📸</div>
+            <h3>{{ currentLanguage === 'en' ? 'Upload Photos' : 'ფოტოების ატვირთვა' }}</h3>
+            <p>{{ currentLanguage === 'en' ? 'Easy photo upload from your device' : 'მარტივი ფოტოების ატვირთვა თქვენი მოწყობილობიდან' }}</p>
+          </div>
+          
+          <div class="feature-preview-item">
+            <div class="feature-icon">🎨</div>
+            <h3>{{ currentLanguage === 'en' ? 'Customize' : 'მორგება' }}</h3>
+            <p>{{ currentLanguage === 'en' ? 'Choose size, pieces, and style' : 'აირჩიეთ ზომა, ნაწილები და სტილი' }}</p>
+          </div>
+          
+          <div class="feature-preview-item">
+            <div class="feature-icon">📦</div>
+            <h3>{{ currentLanguage === 'en' ? 'Fast Delivery' : 'სწრაფი მიწოდება' }}</h3>
+            <p>{{ currentLanguage === 'en' ? 'Get your puzzle delivered quickly' : 'მიიღეთ თქვენი თავსატეხი სწრაფად' }}</p>
+          </div>
+        </div>
+
+        <div class="notify-section">
+          <h3>{{ currentLanguage === 'en' ? 'Get Notified' : 'მიიღეთ შეტყობინება' }}</h3>
+          <p>{{ currentLanguage === 'en' ? 'We\'ll let you know when this feature is ready!' : 'ჩვენ შეგატყობინებთ, როცა ეს ფუნქცია მზად იქნება!' }}</p>
+          <div class="notify-form">
+            <input type="email" 
+                   [placeholder]="currentLanguage === 'en' ? 'Enter your email' : 'შეიყვანეთ თქვენი ელ-ფოსტა'"
+                   class="email-input">
+            <button class="notify-btn">
+              {{ currentLanguage === 'en' ? 'Notify Me' : 'შემატყობინეთ' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="back-to-home">
+          <a routerLink="/" class="btn btn-primary">
+            {{ currentLanguage === 'en' ? 'Back to Home' : 'მთავარ გვერდზე დაბრუნება' }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

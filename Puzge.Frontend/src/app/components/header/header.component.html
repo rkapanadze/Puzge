@@ -14,20 +14,17 @@
 
       <!-- Desktop Navigation -->
       <nav class="desktop-nav">
-        <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-          {{ currentLanguage === 'en' ? 'Home' : 'მთავარი' }}
-        </a>
         <a routerLink="/products" class="nav-link" routerLinkActive="active">
           {{ currentLanguage === 'en' ? 'Products' : 'პროდუქტები' }}
         </a>
-        <a routerLink="/categories" class="nav-link" routerLinkActive="active">
-          {{ currentLanguage === 'en' ? 'Categories' : 'კატეგორიები' }}
-        </a>
-        <a routerLink="/about" class="nav-link" routerLinkActive="active">
-          {{ currentLanguage === 'en' ? 'About' : 'ჩვენ შესახებ' }}
+        <a routerLink="/custom-puzzle" class="nav-link" routerLinkActive="active">
+          {{ currentLanguage === 'en' ? 'Custom Puzzles' : 'ინდივიდუალური თავსატეხები' }}
         </a>
         <a routerLink="/contact" class="nav-link" routerLinkActive="active">
           {{ currentLanguage === 'en' ? 'Contact' : 'კონტაქტი' }}
+        </a>
+        <a routerLink="/about" class="nav-link" routerLinkActive="active">
+          {{ currentLanguage === 'en' ? 'About Us' : 'ჩვენ შესახებ' }}
         </a>
       </nav>
 
@@ -55,20 +52,17 @@
     <!-- Mobile Navigation -->
     <nav class="mobile-nav" [class.open]="isMobileMenuOpen">
       <div class="mobile-nav-content">
-        <a routerLink="/" class="mobile-nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
-          {{ currentLanguage === 'en' ? 'Home' : 'მთავარი' }}
-        </a>
         <a routerLink="/products" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
           {{ currentLanguage === 'en' ? 'Products' : 'პროდუქტები' }}
         </a>
-        <a routerLink="/categories" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
-          {{ currentLanguage === 'en' ? 'Categories' : 'კატეგორიები' }}
-        </a>
-        <a routerLink="/about" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
-          {{ currentLanguage === 'en' ? 'About' : 'ჩვენ შესახებ' }}
+        <a routerLink="/custom-puzzle" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
+          {{ currentLanguage === 'en' ? 'Custom Puzzles' : 'ინდივიდუალური თავსატეხები' }}
         </a>
         <a routerLink="/contact" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
           {{ currentLanguage === 'en' ? 'Contact' : 'კონტაქტი' }}
+        </a>
+        <a routerLink="/about" class="mobile-nav-link" routerLinkActive="active" (click)="closeMobileMenu()">
+          {{ currentLanguage === 'en' ? 'About Us' : 'ჩვენ შესახებ' }}
         </a>
       </div>
     </nav>

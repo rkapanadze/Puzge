@@ -1,6 +1,6 @@
 <div class="home-page">
   <!-- Hero Section -->
-  <section class="hero">
+  <!-- <section class="hero" [style.font-family]="languageService.getFontFamily()">
     <div class="container">
       <div class="hero-content">
         <h1 class="hero-title">
@@ -14,13 +14,14 @@
         </p>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Category Options Section -->
   <section class="category-options">
     <div class="container">
       <div class="category-options-grid">
-        <div class="category-option" *ngFor="let category of getFeaturedCategories()" (click)="navigateToProducts(category.type)">
+        <div class="category-option" *ngFor="let category of getFeaturedCategories()"
+          (click)="navigateToProducts(category.type)">
           <div class="category-option-content">
             <div class="category-option-icon">{{ category.icon }}</div>
             <h3>{{ languageService.getLocalizedText(category.name) }}</h3>
@@ -34,42 +35,81 @@
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="features page-section">
+  <!-- Custom Puzzle Banner -->
+  <section class="custom-puzzle-banner page-section">
     <div class="container">
-      <h2 class="section-title">
-        {{ currentLanguage === 'en' ? 'Why Choose Kvandzi?' : 'რატომ აირჩიოთ კვანძი?' }}
-      </h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🧩</div>
-          <h3>{{ currentLanguage === 'en' ? 'Quality Products' : 'ხარისხიანი პროდუქტები' }}</h3>
-          <p>{{ currentLanguage === 'en'
-            ? 'We carefully select only the best puzzles and games from trusted manufacturers'
-            : 'ჩვენ ფრთხილად ვირჩევთ მხოლოდ საუკეთესო თავსატეხებს და თამაშებს სანდო მწარმოებლებისგან'
-            }}</p>
+      <div class="custom-puzzle-content">
+        <div class="custom-puzzle-icon">🧩</div>
+        <h2 class="custom-puzzle-title">
+          {{ currentLanguage === 'en' ? 'Custom Puzzles Made Easy' : 'მორგებული თავსატეხები მარტივად' }}
+        </h2>
+        <p class="custom-puzzle-description">
+          {{ currentLanguage === 'en'
+          ? 'Have a special image? We can turn it into a beautiful puzzle! Just send us your photos and we\'ll create a
+          custom puzzle just for you.'
+          : 'გაქვთ სპეციალური სურათი? ჩვენ შეგვიძლია ის ლამაზ თავსატეხად ვაქციოთ! უბრალოდ გაგვიგზავნეთ თქვენი ფოტოები და
+          ჩვენ შევქმნით მორგებულ თავსატეხს მხოლოდ თქვენთვის.'
+          }}
+        </p>
+
+        <div class="custom-puzzle-features">
+          <div class="feature-item">
+            <span class="feature-icon">📸</span>
+            <div class="feature-title">{{ currentLanguage === 'en' ? 'Any Photo' : 'ნებისმიერი ფოტო' }}</div>
+            <div class="feature-desc">{{ currentLanguage === 'en' ? 'From family shots to artwork' : 'ოჯახური ფოტოებიდან
+              ნახატებამდე' }}</div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🎨</span>
+            <div class="feature-title">{{ currentLanguage === 'en' ? 'High Quality' : 'მაღალი ხარისხი' }}</div>
+            <div class="feature-desc">{{ currentLanguage === 'en' ? 'Premium print and materials' : 'პრემიუმ მასალები და
+              ბეჭდვა' }}</div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">⚡</span>
+            <div class="feature-title">{{ currentLanguage === 'en' ? 'Fast Turnaround' : 'სწრაფი შექმნა' }}</div>
+            <div class="feature-desc">{{ currentLanguage === 'en' ? 'Ready in 3–5 business days' : '3-5 სამუშაო დღეში
+              მზად' }}</div>
+          </div>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎲</div>
-          <h3>{{ currentLanguage === 'en' ? 'Wide Selection' : 'ფართო არჩევანი' }}</h3>
-          <p>{{ currentLanguage === 'en'
-            ? 'From classic board games to modern card games, we have something for everyone'
-            : 'კლასიკური სამაგიდო თამაშებიდან თანამედროვე ბარათულ თამაშებამდე, ჩვენ გვაქვს ყველასთვის რამე'
-            }}</p>
+
+        <div class="process-steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-title">{{ currentLanguage === 'en' ? 'Send Your Photo' : 'ფოტოს გაგზავნა' }}</div>
+            <div class="step-desc">{{ currentLanguage === 'en' ? 'Choose and upload your photo' : 'აირჩიეთ და
+              გაგვიგზავნეთ თქვენი ფოტო' }}</div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-title">{{ currentLanguage === 'en' ? 'Choose Size' : 'ზომის არჩევა' }}</div>
+            <div class="step-desc">{{ currentLanguage === 'en' ? 'Pick size and number of pieces' : 'აირჩიეთ ზომა და
+              ნაწილების რაოდენობა' }}</div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-title">{{ currentLanguage === 'en' ? 'Production' : 'შექმნა' }}</div>
+            <div class="step-desc">{{ currentLanguage === 'en' ? 'We create your unique puzzle' : 'ჩვენ ვამზადებთ
+              თავსატეხს' }}</div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-title">{{ currentLanguage === 'en' ? 'Receive It' : 'მიღება' }}</div>
+            <div class="step-desc">{{ currentLanguage === 'en' ? 'Get your custom puzzle delivered' : 'მიიღეთ თქვენი
+              მორგებული თავსატეხი' }}</div>
+          </div>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">👨‍👩‍👧‍👦</div>
-          <h3>{{ currentLanguage === 'en' ? 'Family Fun' : 'ოჯახური გასართობი' }}</h3>
-          <p>{{ currentLanguage === 'en'
-            ? 'Our games are perfect for bringing families together and creating lasting memories'
-            : 'ჩვენი თამაშები იდეალურია ოჯახების დასაახლოებლად და წარმუვლელი მეხსიერებების შესაქმნელად'
-            }}</p>
+
+        <div class="custom-puzzle-cta">
+          <a routerLink="/custom-puzzle" class="btn-large">
+            {{ currentLanguage === 'en' ? 'Create Your Custom Puzzle' : 'შექმენით თქვენი მორგებული თავსატეხი' }}
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Section -->
+  <!-- CTA Section 
   <section class="cta page-section">
     <div class="container">
       <div class="cta-content">
@@ -83,5 +123,5 @@
         </a>
       </div>
     </div>
-  </section>
+  </section> -->
 </div>
