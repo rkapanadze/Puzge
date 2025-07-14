@@ -9,9 +9,8 @@ EXPOSE 5005
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Debug
 WORKDIR /src
-COPY ["Puzge.Api/Puzge.Api.csproj", "Puzge.Api/"]
-RUN dotnet restore "Puzge.Api/Puzge.Api.csproj"
 COPY . .
+RUN dotnet restore "Puzge.Api/Puzge.Api.csproj"
 WORKDIR "/src/Puzge.Api"
 RUN dotnet build "Puzge.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
