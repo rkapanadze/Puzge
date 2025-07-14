@@ -20,7 +20,7 @@ services:
       - "8080:8080"
       - "5005:5005"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=puzge_db;Username=puzge_user;Password=puzge_pass
     depends_on:
       - db

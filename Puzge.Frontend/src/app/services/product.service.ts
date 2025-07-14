@@ -8,12 +8,13 @@ import { Category } from '../models/category.model';
 import { Subcategory } from '../models/subcategory.model';
 import { ProductType } from '../enums/product-type.enum';
 import { ApiResponse } from '../models/api-response.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://backend:8080'; // Use Docker Compose service name for backend
+  private apiUrl = environment.apiUrl;
   private useMockData = false; // Set to false when backend is ready
 
   constructor(private http: HttpClient) {}
