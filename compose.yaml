@@ -17,8 +17,8 @@ services:
       context: .
       dockerfile: Puzge.Api/Dockerfile
     ports:
-        - "8080:8080"
-        - "5005:5005"
+      - "8080:8080"
+      - "5005:5005"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=puzge_db;Username=puzge_user;Password=puzge_pass
@@ -29,8 +29,11 @@ services:
     build:
       context: ./Puzge.Frontend
       dockerfile: Dockerfile
+    image: puzge-frontend:latest
     ports:
       - "4200:80"
+    depends_on:
+      - backend
 
 volumes:
   pgdata:

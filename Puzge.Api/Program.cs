@@ -16,12 +16,27 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// ADD THIS LINE:
+builder.Services.AddCors();
+
 var app = builder.Build();
+
+// Automatically apply migrations at startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors(builder =>
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod());
 }
 
 app.MapEndpoints();

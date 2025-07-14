@@ -13,8 +13,8 @@ import { ApiResponse } from '../models/api-response.model';
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:5223'; // Replace with your actual API URL
-  private useMockData = true; // Set to false when backend is ready
+  private apiUrl = 'http://backend:8080'; // Use Docker Compose service name for backend
+  private useMockData = false; // Set to false when backend is ready
 
   constructor(private http: HttpClient) {}
 
