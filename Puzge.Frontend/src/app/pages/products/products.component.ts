@@ -9,6 +9,7 @@ import { Product } from '../../models/product.model';
 import { Category } from '../../models/category.model';
 import { Subcategory } from '../../models/subcategory.model';
 import { ProductType, getProductTypeDisplayText } from '../../enums/product-type.enum';
+import { Language } from '../../models/language.model';
 
 @Component({
   selector: 'app-products',
@@ -23,14 +24,27 @@ export class ProductsComponent implements OnInit {
   filteredProducts: Product[] = [];
 
   // Filter states
-  selectedType: ProductType | null = null;
+  selectedTypes: ProductType[] = [];
   selectedCategories: string[] = [];
   selectedSubcategories: string[] = [];
   searchQuery: string = '';
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+  showAvailableOnly: boolean = false;
+  showDiscountedOnly: boolean = false;
+  sortBy: string = 'price-asc';
 
   // UI states
   isLoading = false;
   showFilters = false;
+  currentLanguage: Language = 'en';
+  categoriesExpanded: boolean = true;
+  subcategoriesExpanded: boolean = true;
+  priceRangeExpanded: boolean = true;
+
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 12; // 4 products per row * 3 rows
 
   // Enums for template
   ProductType = ProductType;
@@ -44,6 +58,9 @@ export class ProductsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.languageService.currentLanguage$.subscribe(lang => {
+      this.currentLanguage = lang;
+    });
     this.loadCategories();
     this.loadProducts();
     this.handleRouteParams();
@@ -52,7 +69,11 @@ export class ProductsComponent implements OnInit {
   private handleRouteParams(): void {
     this.route.queryParams.subscribe(params => {
       if (params['type']) {
-        this.selectedType = params['type'] as ProductType;
+        // Handle single type parameter from homepage
+        this.selectedTypes = [params['type'] as ProductType];
+      } else if (params['types']) {
+        // Handle multiple types parameter
+        this.selectedTypes = params['types'].split(',') as ProductType[];
       }
       if (params['categories']) {
         this.selectedCategories = params['categories'].split(',');
@@ -62,6 +83,21 @@ export class ProductsComponent implements OnInit {
       }
       if (params['search']) {
         this.searchQuery = params['search'];
+      }
+      if (params['minPrice']) {
+        this.minPrice = parseFloat(params['minPrice']);
+      }
+      if (params['maxPrice']) {
+        this.maxPrice = parseFloat(params['maxPrice']);
+      }
+      if (params['available']) {
+        this.showAvailableOnly = params['available'] === 'true';
+      }
+      if (params['discounted']) {
+        this.showDiscountedOnly = params['discounted'] === 'true';
+      }
+      if (params['page']) {
+        this.currentPage = parseInt(params['page']);
       }
       this.applyFilters();
     });
@@ -99,8 +135,8 @@ export class ProductsComponent implements OnInit {
 
   applyFilters(): void {
     this.filteredProducts = this.products.filter(product => {
-      // Type filter
-      if (this.selectedType && product.type !== this.selectedType) {
+      // Type filter - check if product type is in selected types array
+      if (this.selectedTypes.length > 0 && !this.selectedTypes.includes(product.type)) {
         return false;
       }
 
@@ -124,6 +160,24 @@ export class ProductsComponent implements OnInit {
         }
       }
 
+      // Price range filter
+      if (this.minPrice !== null && (product.price === undefined || product.price < this.minPrice)) {
+        return false;
+      }
+      if (this.maxPrice !== null && (product.price === undefined || product.price > this.maxPrice)) {
+        return false;
+      }
+
+      // Availability filter
+      if (this.showAvailableOnly && !product.isAvailable) {
+        return false;
+      }
+
+      // Discounted filter
+      if (this.showDiscountedOnly && !product.isDiscounted) {
+        return false;
+      }
+
       // Search filter
       if (this.searchQuery) {
         const searchLower = this.searchQuery.toLowerCase();
@@ -140,14 +194,43 @@ export class ProductsComponent implements OnInit {
       return true;
     });
 
+    // Reset to first page when filters change
+    this.currentPage = 1;
+    
+    // Apply sorting
+    this.sortProducts();
+    
     this.updateUrlParams();
+  }
+
+  private sortProducts(): void {
+    this.filteredProducts.sort((a, b) => {
+      switch (this.sortBy) {
+        case 'name-asc':
+          return this.getLocalizedText(a.name).localeCompare(this.getLocalizedText(b.name));
+        case 'name-desc':
+          return this.getLocalizedText(b.name).localeCompare(this.getLocalizedText(a.name));
+        case 'price-asc':
+          return (a.price || 0) - (b.price || 0);
+        case 'price-desc':
+          return (b.price || 0) - (a.price || 0);
+        case 'newest':
+          return new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime();
+        default:
+          return 0;
+      }
+    });
   }
 
   private updateUrlParams(): void {
     const queryParams: any = {};
 
-    if (this.selectedType) {
-      queryParams.type = this.selectedType;
+    if (this.selectedTypes.length === 1) {
+      // Use 'type' for single selection (consistent with homepage)
+      queryParams.type = this.selectedTypes[0];
+    } else if (this.selectedTypes.length > 1) {
+      // Use 'types' for multiple selections
+      queryParams.types = this.selectedTypes.join(',');
     }
     if (this.selectedCategories.length > 0) {
       queryParams.categories = this.selectedCategories.join(',');
@@ -158,6 +241,21 @@ export class ProductsComponent implements OnInit {
     if (this.searchQuery) {
       queryParams.search = this.searchQuery;
     }
+    if (this.minPrice !== null) {
+      queryParams.minPrice = this.minPrice;
+    }
+    if (this.maxPrice !== null) {
+      queryParams.maxPrice = this.maxPrice;
+    }
+    if (this.showAvailableOnly) {
+      queryParams.available = 'true';
+    }
+    if (this.showDiscountedOnly) {
+      queryParams.discounted = 'true';
+    }
+    if (this.currentPage > 1) {
+      queryParams.page = this.currentPage;
+    }
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -166,9 +264,17 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  onTypeChange(type: ProductType | null): void {
-    this.selectedType = type;
+  onTypeChange(type: ProductType): void {
+    if (this.selectedTypes.includes(type)) {
+      this.selectedTypes = this.selectedTypes.filter(t => t !== type);
+    } else {
+      this.selectedTypes.push(type);
+    }
     this.applyFilters();
+  }
+
+  isTypeSelected(type: ProductType): boolean {
+    return this.selectedTypes.includes(type);
   }
 
   onCategoryChange(categoryId: string, checked: boolean): void {
@@ -189,15 +295,49 @@ export class ProductsComponent implements OnInit {
     this.applyFilters();
   }
 
+  onPriceChange(): void {
+    this.applyFilters();
+  }
+
+  onAvailabilityChange(): void {
+    this.applyFilters();
+  }
+
+  onSortChange(): void {
+    this.applyFilters();
+  }
+
   onSearchChange(): void {
     this.applyFilters();
   }
 
+  toggleDiscountedOnly(): void {
+    this.showDiscountedOnly = !this.showDiscountedOnly;
+    this.applyFilters();
+  }
+
+  toggleCategories(): void {
+    this.categoriesExpanded = !this.categoriesExpanded;
+  }
+
+  toggleSubcategories(): void {
+    this.subcategoriesExpanded = !this.subcategoriesExpanded;
+  }
+
+  togglePriceRange(): void {
+    this.priceRangeExpanded = !this.priceRangeExpanded;
+  }
+
   clearFilters(): void {
-    this.selectedType = null;
+    this.selectedTypes = [];
     this.selectedCategories = [];
     this.selectedSubcategories = [];
     this.searchQuery = '';
+    this.minPrice = null;
+    this.maxPrice = null;
+    this.showAvailableOnly = false;
+    this.showDiscountedOnly = false;
+    this.sortBy = 'price-asc';
     this.applyFilters();
   }
 
@@ -207,7 +347,28 @@ export class ProductsComponent implements OnInit {
 
   getProductTypeDisplayText(type: ProductType): string {
     const displayText = getProductTypeDisplayText(type);
-    return this.languageService.getCurrentLanguage() === 'ka' ? displayText.ka : displayText.en;
+    return this.currentLanguage === 'ka' ? displayText.ka : displayText.en;
+  }
+
+  getLocalizedText(text: { en: string; ka: string }): string {
+    return this.currentLanguage === 'en' ? text.en : text.ka;
+  }
+
+  getDiscountPercentage(originalPrice: number, currentPrice: number): number {
+    return Math.round(((originalPrice - currentPrice) / originalPrice) * 100);
+  }
+
+  getAllSubcategories(): any[] {
+    const allSubcategories: any[] = [];
+    this.categories.forEach(category => {
+      category.subcategories.forEach(subcategory => {
+        allSubcategories.push({
+          ...subcategory,
+          categoryName: this.getLocalizedText(category.name)
+        });
+      });
+    });
+    return allSubcategories;
   }
 
   getSubcategoriesForCategory(categoryId: string): Subcategory[] {
@@ -221,5 +382,58 @@ export class ProductsComponent implements OnInit {
 
   isSubcategorySelected(subcategoryId: string): boolean {
     return this.selectedSubcategories.includes(subcategoryId);
+  }
+
+  // Pagination methods
+  getPaginatedProducts(): Product[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredProducts.slice(startIndex, endIndex);
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+  }
+
+  getPageNumbers(): number[] {
+    const totalPages = this.getTotalPages();
+    const pages: number[] = [];
+    
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (this.currentPage <= 4) {
+        for (let i = 1; i <= 5; i++) {
+          pages.push(i);
+        }
+        pages.push(-1); // Ellipsis
+        pages.push(totalPages);
+      } else if (this.currentPage >= totalPages - 3) {
+        pages.push(1);
+        pages.push(-1); // Ellipsis
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push(-1); // Ellipsis
+        for (let i = this.currentPage - 1; i <= this.currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push(-1); // Ellipsis
+        pages.push(totalPages);
+      }
+    }
+    
+    return pages;
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.getTotalPages()) {
+      this.currentPage = page;
+      this.updateUrlParams();
+    }
   }
 }

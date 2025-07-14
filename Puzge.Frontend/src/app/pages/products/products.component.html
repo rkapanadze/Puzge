@@ -1,167 +1,229 @@
 <div class="products-page">
   <div class="container">
-    <!-- Page Header -->
-    <div class="page-header">
-      <h1>{{ languageService.getCurrentLanguage() === 'ka' ? 'პროდუქტები' : 'Products' }}</h1>
-      <p>{{ languageService.getCurrentLanguage() === 'ka' ? 'აღმოაჩინეთ ჩვენი პაზლების, სამაგიდო და ბანქოს თამაშების კოლექცია' : 'Discover our collection of puzzles, board games, and card games' }}</p>
-    </div>
-
-    <!-- Search Bar -->
-    <div class="search-section">
-      <div class="search-container">
+    <!-- Search and Type Selector Bar -->
+    <div class="search-filter-bar">
+      <div class="search-section">
         <input
           type="text"
           [(ngModel)]="searchQuery"
           (input)="onSearchChange()"
-          [placeholder]="languageService.getCurrentLanguage() === 'ka' ? 'ძიება...' : 'Search...'"
+          [placeholder]="currentLanguage === 'en' ? 'Search products...' : 'პროდუქტების ძიება...'"
           class="search-input">
-        <button class="filter-toggle" (click)="toggleFilters()">
-          <span>{{ languageService.getCurrentLanguage() === 'ka' ? 'ფილტრები' : 'Filters' }}</span>
-          <span class="filter-icon" [class.active]="showFilters">▼</span>
-        </button>
+        <div class="search-icon">🔍</div>
+      </div>
+      
+      <div class="type-selector">
+        <div class="type-option" 
+             [class.active]="isTypeSelected(ProductType.PUZZLE)"
+             (click)="onTypeChange(ProductType.PUZZLE)">
+          <div class="type-icon">🧩</div>
+          <span class="type-label">{{ currentLanguage === 'en' ? 'Puzzles' : 'თავსატეხები' }}</span>
+        </div>
+        <div class="type-option" 
+             [class.active]="isTypeSelected(ProductType.BOARDGAME)"
+             (click)="onTypeChange(ProductType.BOARDGAME)">
+          <div class="type-icon">🎲</div>
+          <span class="type-label">{{ currentLanguage === 'en' ? 'Board Games' : 'საგაგიო თამაშები' }}</span>
+        </div>
+        <div class="type-option" 
+             [class.active]="isTypeSelected(ProductType.CARDGAME)"
+             (click)="onTypeChange(ProductType.CARDGAME)">
+          <div class="type-icon">🃏</div>
+          <span class="type-label">{{ currentLanguage === 'en' ? 'Card Games' : 'ბანქოს თამაშები' }}</span>
+        </div>
       </div>
     </div>
 
-    <!-- Filters Section -->
-    <div class="filters-section" [class.show]="showFilters">
-      <div class="filters-container">
-
-        <!-- Product Type Filter -->
-        <div class="filter-group">
-          <h3>{{ languageService.getCurrentLanguage() === 'ka' ? 'ტიპი' : 'Type' }}</h3>
-          <div class="filter-options">
-            <label class="filter-option">
-              <input
-                type="radio"
-                [value]="null"
-                [checked]="selectedType === null"
-                (change)="onTypeChange(null)">
-              <span>{{ languageService.getCurrentLanguage() === 'ka' ? 'ყველა' : 'All' }}</span>
-            </label>
-            <label class="filter-option" *ngFor="let type of productTypes">
-              <input
-                type="radio"
-                [value]="type"
-                [checked]="selectedType === type"
-                (change)="onTypeChange(type)">
-              <span>{{ getProductTypeDisplayText(type) }}</span>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Left Sidebar - Filters -->
+      <div class="sidebar">
+        <div class="filter-section">
+          <div class="filter-header" (click)="toggleCategories()">
+            <h3 class="filter-title">{{ currentLanguage === 'en' ? 'Categories' : 'კატეგორიები' }}</h3>
+            <div class="toggle-icon">{{ categoriesExpanded ? '−' : '+' }}</div>
+          </div>
+          <div class="filter-options" [class.expanded]="categoriesExpanded">
+            <label class="filter-option" *ngFor="let category of categories">
+              <input type="checkbox" 
+                     [checked]="isCategorySelected(category.id)"
+                     (change)="onCategoryChange(category.id, $any($event.target).checked)">
+              <span class="filter-text">{{ getLocalizedText(category.name) }}</span>
             </label>
           </div>
         </div>
 
-        <!-- Categories Filter -->
-        <div class="filter-group">
-          <h3>{{ languageService.getCurrentLanguage() === 'ka' ? 'კატეგორიები' : 'Categories' }}</h3>
-          <div class="filter-options">
-            <div class="category-filter" *ngFor="let category of categories">
-              <label class="filter-option">
-                <input
-                  type="checkbox"
-                  [checked]="isCategorySelected(category.id)"
-                  (change)="onCategoryChange(category.id, $any($event.target).checked)">
-                <span>{{ languageService.getLocalizedText(category.name) }}</span>
-              </label>
+        <div class="filter-section">
+          <div class="filter-header" (click)="toggleSubcategories()">
+            <h3 class="filter-title">{{ currentLanguage === 'en' ? 'Subcategories' : 'ქვეკატეგორიები' }}</h3>
+            <div class="toggle-icon">{{ subcategoriesExpanded ? '−' : '+' }}</div>
+          </div>
+          <div class="filter-options" [class.expanded]="subcategoriesExpanded">
+            <label class="filter-option subcategory-item" *ngFor="let subcategory of getAllSubcategories()">
+              <input type="checkbox" 
+                     [checked]="isSubcategorySelected(subcategory.id)"
+                     (change)="onSubcategoryChange(subcategory.id, $any($event.target).checked)">
+              <span class="filter-text">{{ getLocalizedText(subcategory.name) }}</span>
+            </label>
+          </div>
+        </div>
 
-              <!-- Subcategories -->
-              <div class="subcategory-filters" *ngIf="isCategorySelected(category.id) && category.subcategories.length > 0">
-                <label class="filter-option subcategory" *ngFor="let subcategory of category.subcategories">
-                  <input
-                    type="checkbox"
-                    [checked]="isSubcategorySelected(subcategory.id)"
-                    (change)="onSubcategoryChange(subcategory.id, $any($event.target).checked)">
-                  <span>{{ languageService.getLocalizedText(subcategory.name) }}</span>
-                </label>
+        <div class="filter-section">
+          <div class="filter-header" (click)="togglePriceRange()">
+            <h3 class="filter-title">{{ currentLanguage === 'en' ? 'Price Range' : 'ფასის დიაპაზონი' }}</h3>
+            <div class="toggle-icon">{{ priceRangeExpanded ? '−' : '+' }}</div>
+          </div>
+          <div class="filter-options" [class.expanded]="priceRangeExpanded">
+            <div class="price-range">
+              <div class="price-inputs">
+                <div class="price-input-group">
+                  <label class="price-label">{{ currentLanguage === 'en' ? 'Min Price' : 'მინ. ფასი' }}</label>
+                  <input type="number" 
+                         [(ngModel)]="minPrice" 
+                         (input)="onPriceChange()"
+                         [placeholder]="currentLanguage === 'en' ? 'Min' : 'მინ'"
+                         class="price-input">
+                </div>
+                <div class="price-input-group">
+                  <label class="price-label">{{ currentLanguage === 'en' ? 'Max Price' : 'მაქს. ფასი' }}</label>
+                  <input type="number" 
+                         [(ngModel)]="maxPrice" 
+                         (input)="onPriceChange()"
+                         [placeholder]="currentLanguage === 'en' ? 'Max' : 'მაქს'"
+                         class="price-input">
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Clear Filters Button -->
         <button class="clear-filters-btn" (click)="clearFilters()">
-          {{ languageService.getCurrentLanguage() === 'ka' ? 'ფილტრების გასუფთავება' : 'Clear Filters' }}
+          {{ currentLanguage === 'en' ? 'Clear Filters' : 'ფილტრების გასუფთავება' }}
         </button>
       </div>
-    </div>
 
-    <!-- Results Summary -->
-    <div class="results-summary">
-      <p>
-        {{ languageService.getCurrentLanguage() === 'ka' ? 'ნაპოვნია' : 'Found' }}
-        <strong>{{ filteredProducts.length }}</strong>
-        {{ languageService.getCurrentLanguage() === 'ka' ? 'პროდუქტი' : 'products' }}
-      </p>
-    </div>
+      <!-- Right Content - Products -->
+      <div class="content-area">
+        <!-- Results Summary -->
+        <div class="results-summary">
+          <div class="sort-section">
+            <label for="sort-select">{{ currentLanguage === 'en' ? 'Sort by:' : 'დალაგება:' }}</label>
+            <select id="sort-select" [(ngModel)]="sortBy" (change)="onSortChange()" class="sort-dropdown">
+              <option value="price-asc">{{ currentLanguage === 'en' ? 'Price Low to High' : 'ფასი დაბლიდან მაღლა' }}</option>
+              <option value="price-desc">{{ currentLanguage === 'en' ? 'Price High to Low' : 'ფასი მაღლიდან დაბლა' }}</option>
+              <option value="name-asc">{{ currentLanguage === 'en' ? 'Name A-Z' : 'სახელი ა-ჰ' }}</option>
+              <option value="name-desc">{{ currentLanguage === 'en' ? 'Name Z-A' : 'სახელი ჰ-ა' }}</option>
+              <option value="newest">{{ currentLanguage === 'en' ? 'Newest First' : 'უახლესი პირველი' }}</option>
+            </select>
+            
+            <button class="discount-btn" 
+                    [class.active]="showDiscountedOnly"
+                    (click)="toggleDiscountedOnly()">
+              {{ currentLanguage === 'en' ? 'Only Discounted' : 'მხოლოდ ფასდაკლებული' }}
+            </button>
+          </div>
 
-    <!-- Products Grid -->
-    <div class="products-grid" *ngIf="!isLoading">
-      <div class="product-card" *ngFor="let product of filteredProducts">
-        <div class="product-image">
-          <img [src]="product.images[0] || '/assets/images/placeholder.jpg'"
-               [alt]="languageService.getLocalizedText(product.name)"
-               loading="lazy">
-          <div class="product-type-badge">
-            {{ getProductTypeDisplayText(product.type) }}
+          <div class="results-count">
+            <p>
+              {{ currentLanguage === 'en' ? 'Found' : 'ნაპოვნია' }}
+              <strong>{{ filteredProducts.length }}</strong>
+              {{ currentLanguage === 'en' ? 'products' : 'პროდუქტი' }}
+            </p>
+          </div>
+
+          <div class="top-pagination">
+            <button class="pagination-btn" 
+                    [disabled]="currentPage === 1"
+                    (click)="changePage(currentPage - 1)">
+              {{ currentLanguage === 'en' ? 'Previous' : 'წინა' }}
+            </button>
+            
+            <div class="page-numbers">
+              <button class="page-btn" 
+                      *ngFor="let page of getPageNumbers()"
+                      [class.active]="page === currentPage"
+                      (click)="changePage(page)">
+                {{ page }}
+              </button>
+            </div>
+            
+            <button class="pagination-btn" 
+                    [disabled]="currentPage === getTotalPages()"
+                    (click)="changePage(currentPage + 1)">
+              {{ currentLanguage === 'en' ? 'Next' : 'შემდეგი' }}
+            </button>
           </div>
         </div>
 
-        <div class="product-info">
-          <h3 class="product-name">{{ languageService.getLocalizedText(product.name) }}</h3>
-          <p class="product-description">{{ languageService.getLocalizedText(product.description) }}</p>
-
-          <!-- Categories Tags -->
-          <div class="product-tags">
-            <span class="tag" *ngFor="let category of product.categories">
-              {{ languageService.getLocalizedText(category.name) }}
-            </span>
-          </div>
-
-          <!-- Subcategories Tags -->
-          <div class="product-subtags" *ngIf="product.subcategories.length > 0">
-            <span class="subtag" *ngFor="let subcategory of product.subcategories">
-              {{ languageService.getLocalizedText(subcategory.name) }}
-            </span>
-          </div>
-
-          <!-- Product Specifications -->
-          <div class="product-specs" *ngIf="product.specifications">
-            <div class="spec" *ngIf="product.specifications.ageRange">
-              <strong>{{ languageService.getCurrentLanguage() === 'ka' ? 'ასაკი:' : 'Age:' }}</strong>
-              {{ product.specifications.ageRange }}
+        <!-- Products Grid -->
+        <div class="products-grid" *ngIf="!isLoading">
+          <div class="product-card" *ngFor="let product of getPaginatedProducts()" [class.out-of-stock]="!product.isAvailable">
+            <div class="product-image">
+              <img [src]="product.images[0] || '/assets/images/placeholder.jpg'"
+                   [alt]="getLocalizedText(product.name)"
+                   loading="lazy">
+              
+              <!-- Sale Badge -->
+              <div class="sale-badge" *ngIf="product.isDiscounted">
+                {{ currentLanguage === 'en' ? 'SALE' : 'ფასდაკლება' }}
+              </div>
             </div>
-            <div class="spec" *ngIf="product.specifications.playerCount">
-              <strong>{{ languageService.getCurrentLanguage() === 'ka' ? 'მოთამაშეები:' : 'Players:' }}</strong>
-              {{ product.specifications.playerCount }}
-            </div>
-            <div class="spec" *ngIf="product.specifications.playTime">
-              <strong>{{ languageService.getCurrentLanguage() === 'ka' ? 'დრო:' : 'Time:' }}</strong>
-              {{ product.specifications.playTime }}
+
+            <div class="product-info">
+              <h3 class="product-name">{{ getLocalizedText(product.name) }}</h3>
+              <p class="product-description">{{ getLocalizedText(product.description) }}</p>
+              
+              <div class="product-price" *ngIf="product.price">
+                <div class="price-container">
+                  <span class="current-price">{{ product.price }} ₾</span>
+                  <span class="original-price" *ngIf="product.originalPrice && product.originalPrice > product.price">
+                    {{ product.originalPrice }} ₾
+                  </span>
+                </div>
+                <div class="discount-percentage" *ngIf="product.originalPrice && product.originalPrice > product.price">
+                  -{{ getDiscountPercentage(product.originalPrice, product.price) }}%
+                </div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <!-- Availability -->
-          <div class="availability" [class.available]="product.isAvailable">
-            {{ product.isAvailable ?
-            (languageService.getCurrentLanguage() === 'ka' ? 'ხელმისაწვდომია' : 'Available') :
-            (languageService.getCurrentLanguage() === 'ka' ? 'არ არის ხელმისაწვდომი' : 'Not Available')
-            }}
-          </div>
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="isLoading">
+          <div class="loading-spinner"></div>
+          <p>{{ currentLanguage === 'en' ? 'Loading...' : 'იტვირთება...' }}</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="!isLoading && filteredProducts.length === 0">
+          <div class="empty-icon">🎯</div>
+          <h3>{{ currentLanguage === 'en' ? 'No Products Found' : 'პროდუქტები ვერ მოიძებნა' }}</h3>
+          <p>{{ currentLanguage === 'en' ? 'Try different filters or search terms' : 'სცადეთ სხვა ფილტრები ან საძიებო ტერმინი' }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Loading State -->
-    <div class="loading-state" *ngIf="isLoading">
-      <div class="loading-spinner"></div>
-      <p>{{ languageService.getCurrentLanguage() === 'ka' ? 'იტვირთება...' : 'Loading...' }}</p>
-    </div>
-
-    <!-- Empty State -->
-    <div class="empty-state" *ngIf="!isLoading && filteredProducts.length === 0">
-      <div class="empty-icon">🎯</div>
-      <h3>{{ languageService.getCurrentLanguage() === 'ka' ? 'პროდუქტები ვერ მოიძებნა' : 'No Products Found' }}</h3>
-      <p>{{ languageService.getCurrentLanguage() === 'ka' ? 'სცადეთ სხვა ფილტრები ან საძიებო ტერმინი' : 'Try different filters or search terms' }}</p>
-      <button class="clear-filters-btn" (click)="clearFilters()">
-        {{ languageService.getCurrentLanguage() === 'ka' ? 'ფილტრების გასუფთავება' : 'Clear All Filters' }}
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="filteredProducts.length > 0">
+      <button class="pagination-btn" 
+              [disabled]="currentPage === 1"
+              (click)="changePage(currentPage - 1)">
+        {{ currentLanguage === 'en' ? 'Previous' : 'წინა' }}
+      </button>
+      
+      <div class="page-numbers">
+        <button class="page-btn" 
+                *ngFor="let page of getPageNumbers()"
+                [class.active]="page === currentPage"
+                (click)="changePage(page)">
+          {{ page }}
+        </button>
+      </div>
+      
+      <button class="pagination-btn" 
+              [disabled]="currentPage === getTotalPages()"
+              (click)="changePage(currentPage + 1)">
+        {{ currentLanguage === 'en' ? 'Next' : 'შემდეგი' }}
       </button>
     </div>
   </div>

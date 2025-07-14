@@ -70,6 +70,9 @@ export class ProductService {
       categories: [this.mockCategories[0]],
       subcategories: [this.mockCategories[0].subcategories[0]],
       images: ['/assets/images/puzzle1.jpg'],
+      price: 45.99,
+      originalPrice: 59.99,
+      isDiscounted: true,
       specifications: {
         ageRange: '12+',
         playerCount: '1-4',
@@ -87,6 +90,7 @@ export class ProductService {
       categories: [this.mockCategories[1]],
       subcategories: [this.mockCategories[1].subcategories[0]],
       images: ['/assets/images/chess.jpg'],
+      price: 89.99,
       specifications: {
         ageRange: '8+',
         playerCount: '2',
@@ -104,10 +108,51 @@ export class ProductService {
       categories: [this.mockCategories[2]],
       subcategories: [this.mockCategories[2].subcategories[1]],
       images: ['/assets/images/poker.jpg'],
+      price: 12.99,
+      originalPrice: 19.99,
+      isDiscounted: true,
       specifications: {
         ageRange: '18+',
         playerCount: '2-10',
         playTime: '30-120 min'
+      },
+      isAvailable: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: '4',
+      name: { en: '500 Piece Puzzle', ka: '500 ცალი პაზლი' },
+      description: { en: 'Medium difficulty puzzle', ka: 'საშუალო სირთულის პაზლი' },
+      type: ProductType.PUZZLE,
+      categories: [this.mockCategories[0]],
+      subcategories: [this.mockCategories[0].subcategories[0]],
+      images: ['/assets/images/puzzle2.jpg'],
+      price: 29.99,
+      specifications: {
+        ageRange: '8+',
+        playerCount: '1-2',
+        playTime: '1-2 hours'
+      },
+      isAvailable: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: '5',
+      name: { en: 'Monopoly Classic', ka: 'მონოპოლია კლასიკური' },
+      description: { en: 'The classic board game', ka: 'კლასიკური სამაგიდო თამაში' },
+      type: ProductType.BOARDGAME,
+      categories: [this.mockCategories[1]],
+      subcategories: [this.mockCategories[1].subcategories[1]],
+      images: ['/assets/images/monopoly.jpg'],
+      price: 34.99,
+      originalPrice: 44.99,
+      isDiscounted: true,
+      specifications: {
+        ageRange: '8+',
+        playerCount: '2-8',
+        playTime: '60-180 min'
       },
       isAvailable: true,
       createdAt: new Date(),

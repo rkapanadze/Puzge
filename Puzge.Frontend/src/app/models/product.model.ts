@@ -17,7 +17,9 @@ export interface Product {
   subcategories: Subcategory[];
   images: string[];
   price?: number;
+  originalPrice?: number;
   isAvailable: boolean;
+  isDiscounted?: boolean;
   createdAt: Date;
   updatedAt: Date;
   specifications?: {
