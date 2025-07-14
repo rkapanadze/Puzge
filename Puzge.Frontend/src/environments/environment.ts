@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5223'
+  apiUrl: 'https://puzge-api.onrender.com'
 }; 
